@@ -8,12 +8,16 @@ dotenv.config();
 // can use .env variable below this
 console.log(process.env.PORT);
 
+import authRoutes from "./routes/auth.route";
 import bookRoutes from './routes/book.route';
 
 const app: Application = express();
 // const PORT: number = 3000;
 
 app.use(bodyParser.json());
+
+app.use('/api/auth', authRoutes);
+
 app.use('/api/books', bookRoutes);
 
 app.get('/', (req: Request, res: Response) => {
