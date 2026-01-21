@@ -27,3 +27,6 @@ export const LoginUserDTO = z.object({
     password: z.string().min(6)
 });
 export type LoginUserDTO = z.infer<typeof LoginUserDTO>;
+
+export const UpdateUserDTO = UserSchema.partial(); // all fields optional for update
+export type UpdateUserDTO = z.infer<typeof UpdateUserDTO>;

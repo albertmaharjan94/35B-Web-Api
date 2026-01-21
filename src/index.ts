@@ -4,6 +4,8 @@ import { connectDatabase } from './database/mongodb';
 import { PORT } from './config';
 import cors from 'cors';
 import dotenv from "dotenv";
+import path from "path";
+
 dotenv.config();
 // can use .env variable below this
 console.log(process.env.PORT);
@@ -14,6 +16,9 @@ import authUserRoutes from './routes/admin/user.route';
 
 
 const app: Application = express();
+
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
 let corsOptions = {
     origin: ["http://localhost:3000", "http://localhost:3005"],
     // which domain can access your backend server

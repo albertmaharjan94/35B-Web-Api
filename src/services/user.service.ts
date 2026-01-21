@@ -1,4 +1,4 @@
-import { CreateUserDTO, LoginUserDTO } from "../dtos/user.dto";
+import { CreateUserDTO, LoginUserDTO, UpdateUserDTO } from "../dtos/user.dto";
 import { UserRepository } from "../repositories/user.repository";
 import  bcryptjs from "bcryptjs"
 import { HttpError } from "../errors/http-error";
@@ -57,5 +57,31 @@ export class UserService {
             throw new HttpError(404, "User not found");
         }
         return user;
+    }
+
+    async updateUser(id: string, data: UpdateUserDTO){
+        const user = await userRepository.getUserById(id);
+        if(!user){
+            throw new HttpError(404, "User not found");
+        }
+        if(user.email !== data.email){
+            const emailCheck = await userRepository.getUserByEmail(data.email!);
+            if(emailCheck){
+                throw new HttpError(403, "Email already in use");
+            }
+        }
+        if(user.username !== data.username){
+            const usernameCheck = await userRepository.getUserByUsername(data.username!);
+            if(usernameCheck){
+                throw new HttpError(403, "Username already in use");
+            }
+        }
+        if(data.password){
+            // hash new password
+            const hashedPassword = await bcryptjs.hash(data.password, 10);
+            data.password = hashedPassword;
+        }
+        const updatedUser = await userRepository.updateUser(id, data);
+        return updatedUser;
     }
 }
