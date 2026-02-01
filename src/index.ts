@@ -13,7 +13,7 @@ console.log(process.env.PORT);
 import authRoutes from "./routes/auth.route";
 import bookRoutes from './routes/book.route';
 import authUserRoutes from './routes/admin/user.route';
-
+import blogRoutes from './routes/blog.route';
 
 const app: Application = express();
 
@@ -28,9 +28,8 @@ let corsOptions = {
 app.use(cors(corsOptions)); // implement cors middleware
 
 // const PORT: number = 3000;
-
 app.use(bodyParser.json());
-
+app.use('/api/blogs', blogRoutes);
 app.use('/api/auth', authRoutes);
 
 app.use('/api/books', bookRoutes);
