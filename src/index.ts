@@ -14,7 +14,7 @@ import authRoutes from "./routes/auth.route";
 import bookRoutes from './routes/book.route';
 import authUserRoutes from './routes/admin/user.route';
 import blogRoutes from './routes/blog.route';
-
+import adminBlogRoutes from './routes/admin/blog.route';
 const app: Application = express();
 
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
@@ -34,6 +34,7 @@ app.use('/api/auth', authRoutes);
 
 app.use('/api/books', bookRoutes);
 app.use('/api/admin/users', authUserRoutes);
+app.use('/api/admin/blogs', adminBlogRoutes);
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello, World!');
