@@ -45,9 +45,9 @@ export class AuthController {
         }
     }
     async getUserById(req: Request, res: Response) {
-        try{
+        try {
             const userId = req.user?._id;
-            if(!userId){
+            if (!userId) {
                 return res.status(400).json(
                     { success: false, message: "User ID not provided" }
                 );
@@ -56,7 +56,7 @@ export class AuthController {
             return res.status(200).json(
                 { success: true, message: "User fetched successfully", data: user }
             );
-        }catch (error: Error | any) {
+        } catch (error: Error | any) {
             return res.status(error.statusCode ?? 500).json(
                 { success: false, message: error.message || "Internal Server Error" }
             );
@@ -64,9 +64,9 @@ export class AuthController {
     }
 
     async updateUser(req: Request, res: Response) {
-        try{
+        try {
             const userId = req.user?._id;
-            if(!userId){
+            if (!userId) {
                 return res.status(400).json(
                     { success: false, message: "User ID not provided" }
                 );
@@ -77,14 +77,37 @@ export class AuthController {
                     { success: false, message: z.prettifyError(parsedData.error) }
                 )
             }
-            if(req.file){ // if file is being uploaded
+            if (req.file) { // if file is being uploaded
                 parsedData.data.imageUrl = `/uploads/${req.file.filename}`;
             }
             const updatedUser = await userService.updateUser(userId, parsedData.data);
             return res.status(200).json(
                 { success: true, message: "User updated successfully", data: updatedUser }
             );
-        }catch (error: Error | any) {
+        } catch (error: Error | any) {
+            return res.status(error.statusCode ?? 500).json(
+                { success: false, message: error.message || "Internal Server Error" }
+            );
+        }
+    }
+
+    async requestPasswordReset(req: Request, res: Response) {
+        try {
+            const email = req.body.email;
+            if (!email) {
+                return res.status(400).json(
+                    { success: false, message: "Email is required" }
+                );
+            }
+            const user = await userService.sendResetPasswordEmail(email);
+            return res.status(200).json(
+                {
+                    success: true,
+                    data: user,
+                    message: "Password reset email sent"
+                }
+            );
+        } catch (error: Error | any) {
             return res.status(error.statusCode ?? 500).json(
                 { success: false, message: error.message || "Internal Server Error" }
             );

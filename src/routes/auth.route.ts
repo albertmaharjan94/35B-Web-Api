@@ -17,4 +17,10 @@ router.put(
     uploads.single("image"), // image = fieldname in form-data
     authController.updateUser
 );
+
+router.post(
+    '/request-password-reset',
+    authController.requestPasswordReset
+)
+
 export default router;
