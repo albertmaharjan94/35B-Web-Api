@@ -22,5 +22,6 @@ router.post(
     '/request-password-reset',
     authController.requestPasswordReset
 )
+router.post("/reset-password/:token", authController.resetPassword);
 
 export default router;
